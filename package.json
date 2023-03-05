@@ -18,10 +18,11 @@
     "express": "^4.18.2",
     "morgan": "~1.9.1",
     "prisma": "^3.14.0",
-    "sanitize-html": "^2.7.0"
+    "sanitize-html": "^2.7.0",
+    "moment-timezone": "^0.5.41",
+    "moment": "^2.29.4"
   },
   "devDependencies": {
-    "moment": "^2.29.4",
     "nodemon": "^2.0.16"
   },
   "nodemonConfig": {
