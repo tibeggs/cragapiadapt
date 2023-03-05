@@ -10,52 +10,46 @@ const router = express.Router();
 
 const prisma = new PrismaClient();
 
-// REMOVE TODO ITEMS BEGIN 
-const prepop = [
-  { id: "feedfacefeedfacefeedface", title: '<a href="http://adaptable.io/docs/starters/express-prisma-mongo-starter#idea-2-deploy-a-code-update">Deploy a code update</a> by removing the banner message', done: false },
-  { id: "beeffeedbeeffeedbeeffeed", title: '<a href="https://adaptable.io/docs/starters/express-prisma-mongo-starter#idea-3-start-building-your-app-by-adding-more-api-services">Customize this app</a> by adding an API service to delete To Do items', done: false },
-];
-
-prepop.map((i) => prisma.TodoItem.create({ data: i })
-  .then(() => console.log(`Added pre-populated item with id ${i.id}`))
-  .catch((e) => {
-    if (!((e instanceof PrismaClientKnownRequestError)
-      && e.code === "P2002")) {
-      console.error(`Error creating prepopulated item ${i.id}: ${e.message}`);
-    } // else prepopulated entries are already present
-  }
-  ));
-// REMOVE TODO ITEMS END
-
 const asyncMiddleware = fn => (req, res, next) => {
   Promise.resolve(fn(req, res, next))
     .catch(next);
 };
 
-router.post("/", asyncMiddleware(async (req, res) => {
-  const { title: titleIn, done } = req.body;
-  const title = sanitizeHtml(titleIn, {
-    allowedTags: ['a'],
-    allowedAttributes: {
-      'a': ['href']
-    },
-  });
+// router.post("/", asyncMiddleware(async (req, res) => {
+//   const { title: titleIn, done } = req.body;
+//   const title = sanitizeHtml(titleIn, {
+//     allowedTags: ['a'],
+//     allowedAttributes: {
+//       'a': ['href']
+//     },
+//   });
 
-  const result = await prisma.TodoItem.create({
-    data: {
-      title,
-      done,
-    }
-  });
-  res.json(result);
-}));
+//   const result = await prisma.TodoItem.create({
+//     data: {
+//       title,
+//       done,
+//     }
+//   });
+//   res.json(result);
+// }));
+// router.patch('/:id', asyncMiddleware(async (req, res) => {
+//   const { id } = req.params;
+//   const updated = await prisma.TodoItem.update({
+//     where: { id },
+//     data: req.body,
+//   });
+//   res.json(updated);
+// }));
 
 router.get('/', asyncMiddleware(async (req, res) => {
-  const cragjson = await call_worker()
+  var wapikey = req.headers.wapikey
+  console.log(wapikey);
+
+  const cragjson = await call_worker(wapikey)
   res.json(cragjson);
 }));
 
-async function call_worker() {
+async function call_worker(wapikey) {
   return new Promise((resolve, reject) => {
     try {
       fetch('https://rapid-poetry-328e.cwmtb.workers.dev/')
@@ -64,7 +58,7 @@ async function call_worker() {
           // console.log(result.json());
           result.json()
           .then(res => {
-            update_dataset(res)
+            update_dataset(res,wapikey)
             .then(result => {
               resolve(result)
             })
@@ -77,16 +71,7 @@ async function call_worker() {
   })
 }
 
-router.patch('/:id', asyncMiddleware(async (req, res) => {
-  const { id } = req.params;
-  const updated = await prisma.TodoItem.update({
-    where: { id },
-    data: req.body,
-  });
-  res.json(updated);
-}));
-
-async function update_dataset(json) {
+async function update_dataset(json, wapikey) {
   var dd = moment().tz("America/New_York").format("DD")
   var mm = moment().tz("America/New_York").format("MM")
   var yyyy = moment().tz("America/New_York").format("YYYY")
@@ -101,7 +86,7 @@ async function update_dataset(json) {
     // await get_weather(crag_key[0], json)
     if (parseInt(start_key) - 1 < parseInt(crag_key[0]) && parseInt(crag_key[0]) < parseInt(start_key) + 1) {
       // console.log(crag_key[0]);
-      await get_weather(crag_key[0], json)
+      await get_weather(crag_key[0], json,wapikey)
     }
 
   }
@@ -126,7 +111,7 @@ function get_start_key(json, today) {
   return -1
 }
 
-async function get_weather(crag_key, json) {
+async function get_weather(crag_key, json, wapikey) {
   return new Promise((resolve, reject) => {
     try {
       json[crag_key].forecast = "foo";
@@ -142,9 +127,8 @@ async function get_weather(crag_key, json) {
       // console.log(lnglat);
       var lng = lnglat[0];
       var lat = lnglat[1];
-      console.log(process.env.wapikey);
-      var forecast_url = `https://api.weatherapi.com/v1/forecast.json?key=${process.env.wapikey}&q=${lat},${lng}&days=10&aqi=no&alerts=no`;
-      var past_url = `https://api.weatherapi.com/v1/history.json?key=${process.env.wapikey}&q=${lat},${lng}&dt=${yyyy}-${mm}-${dd}`
+      var forecast_url = `https://api.weatherapi.com/v1/forecast.json?key=${wapikey}&q=${lat},${lng}&days=10&aqi=no&alerts=no`;
+      var past_url = `https://api.weatherapi.com/v1/history.json?key=${wapikey}&q=${lat},${lng}&dt=${yyyy}-${mm}-${dd}`
       console.log(forecast_url);
       const init = {
         headers: {
