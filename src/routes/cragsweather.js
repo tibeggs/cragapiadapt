@@ -43,6 +43,7 @@ async function call_worker(wapikey) {
           // resolve(res);
     }
     catch (err) {
+      console.log("error");
       resolve(err);
     }
   })
@@ -53,7 +54,6 @@ async function update_dataset(json, wapikey) {
   var mm = moment().tz("America/New_York").format("MM")
   var yyyy = moment().tz("America/New_York").format("YYYY")
   var dformat = `${yyyy}-${mm}-${dd}`
-  const headers = new Headers();
   console.log(json);
   console.log(dformat);
   // const start_key = get_start_key(json, dformat);
