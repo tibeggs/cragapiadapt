@@ -21,7 +21,8 @@
     "morgan": "~1.9.1",
     "prisma": "^3.14.0",
     "sanitize-html": "^2.7.0",
-    "sjcl": "^1.0.8"
+    "sjcl": "^1.0.8",
+    "node-fetch": "^2.6.9"
   },
   "devDependencies": {
     "cryptico": "^1.0.2",

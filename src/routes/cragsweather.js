@@ -8,6 +8,7 @@ const sanitizeHtml = require('sanitize-html');
 const express = require('express');
 const router = express.Router();
 const sjcl = require('sjcl');
+const fetch = require("node-fetch");
 
 const prisma = new PrismaClient();
 
@@ -54,7 +55,7 @@ async function update_dataset(json, wapikey) {
   var mm = moment().tz("America/New_York").format("MM")
   var yyyy = moment().tz("America/New_York").format("YYYY")
   var dformat = `${yyyy}-${mm}-${dd}`
-  console.log(json);
+  // console.log(json);
   console.log(dformat);
   // const start_key = get_start_key(json, dformat);
   const start_key = 0;
