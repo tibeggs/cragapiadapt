@@ -18,7 +18,9 @@ const asyncMiddleware = fn => (req, res, next) => {
 
 router.get('/', asyncMiddleware(async (req, res) => {
   // var wapikey = "asdasd"
+  
   var PassPhrase = process.env.cragpassphrase; 
+  console.log(PassPhrase, req.headers.wapikey);
   var wapikey = sjcl.decrypt(PassPhrase, req.headers.wapikey);
   const cragjson = await call_worker(wapikey)
   res.json(cragjson);
