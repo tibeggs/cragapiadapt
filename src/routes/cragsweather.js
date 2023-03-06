@@ -7,6 +7,7 @@ const moment = require('moment-timezone');
 const sanitizeHtml = require('sanitize-html');
 const express = require('express');
 const router = express.Router();
+const sjcl = require('sjcl');
 
 const prisma = new PrismaClient();
 
@@ -15,36 +16,10 @@ const asyncMiddleware = fn => (req, res, next) => {
     .catch(next);
 };
 
-// router.post("/", asyncMiddleware(async (req, res) => {
-//   const { title: titleIn, done } = req.body;
-//   const title = sanitizeHtml(titleIn, {
-//     allowedTags: ['a'],
-//     allowedAttributes: {
-//       'a': ['href']
-//     },
-//   });
-
-//   const result = await prisma.TodoItem.create({
-//     data: {
-//       title,
-//       done,
-//     }
-//   });
-//   res.json(result);
-// }));
-// router.patch('/:id', asyncMiddleware(async (req, res) => {
-//   const { id } = req.params;
-//   const updated = await prisma.TodoItem.update({
-//     where: { id },
-//     data: req.body,
-//   });
-//   res.json(updated);
-// }));
-
 router.get('/', asyncMiddleware(async (req, res) => {
-  var wapikey = req.headers.wapikey
-  console.log(wapikey);
-
+  // var wapikey = "asdasd"
+  var PassPhrase = process.env.cragpassphrase; 
+  var wapikey = sjcl.decrypt(PassPhrase, req.headers.wapikey);
   const cragjson = await call_worker(wapikey)
   res.json(cragjson);
 }));

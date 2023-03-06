@@ -48,7 +48,7 @@ const initTodo = () => {
         const doRefresh = async () => {
             const list = document.querySelector("#todo-list");
 
-            const resp = await apiFetch("/todos");
+            const resp = await apiFetch("/cragsweather");
             const todos = await resp.json();
             if (todos.length === 0) {
                 list.innerHTML = noItems;
@@ -65,7 +65,7 @@ const initTodo = () => {
         const title = input.value;
         if (!title) return;
 
-        await apiFetch("/todos", "POST", { title, done: false });
+        await apiFetch("/cragsweather", "POST", { title, done: false });
 
         input.value = "";
         refreshList();
@@ -73,7 +73,7 @@ const initTodo = () => {
 
     const handleTodoChange = (ev, id) => {
         const doChange = async () => {
-            await apiFetch(`/todos/${id}`, "PATCH", { done: ev.target.checked });
+            await apiFetch(`/cragsweather/${id}`, "PATCH", { done: ev.target.checked });
 
             refreshList();
         }

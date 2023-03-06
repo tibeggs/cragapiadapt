@@ -16,13 +16,15 @@
     "debug": "~2.6.9",
     "dotenv": "^16.0.1",
     "express": "^4.18.2",
+    "moment": "^2.29.4",
+    "moment-timezone": "^0.5.41",
     "morgan": "~1.9.1",
     "prisma": "^3.14.0",
     "sanitize-html": "^2.7.0",
-    "moment-timezone": "^0.5.41",
-    "moment": "^2.29.4"
+    "sjcl": "^1.0.8"
   },
   "devDependencies": {
+    "cryptico": "^1.0.2",
     "nodemon": "^2.0.16"
   },
   "nodemonConfig": {

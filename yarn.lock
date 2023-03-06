@@ -171,6 +171,11 @@
     "object-assign" "^4"
     "vary" "^1"
 
+"cryptico@^1.0.2":
+  "integrity" "sha512-uRFapD3lQBUmZHLugTT8JLHF8Dst/BQMYH9mVnNjdwJTVz5TyLwP9kkGj0sDbKvHVoffhN/IYENO1mYwV9pRqg=="
+  "resolved" "https://registry.npmjs.org/cryptico/-/cryptico-1.0.2.tgz"
+  "version" "1.0.2"
+
 "debug@^3.2.7":
   "integrity" "sha512-CFjzYYAi4ThfiQvizrFQevTTXHtnCqWfe7x1AhgEscTz6ZbLbfoLRLPugTQyBth6f8ZERVUSyWHFD/7Wu4t1XQ=="
   "resolved" "https://registry.npmjs.org/debug/-/debug-3.2.7.tgz"
@@ -760,6 +765,11 @@
   "version" "1.1.0"
   dependencies:
     "semver" "~7.0.0"
+
+"sjcl@^1.0.8":
+  "integrity" "sha512-LzIjEQ0S0DpIgnxMEayM1rq9aGwGRG4OnZhCdjx7glTaJtf4zRfpg87ImfjSJjoW9vKpagd82McDOwbRT5kQKQ=="
+  "resolved" "https://registry.npmjs.org/sjcl/-/sjcl-1.0.8.tgz"
+  "version" "1.0.8"
 
 "source-map-js@^1.0.2":
   "integrity" "sha512-R0XvVJ9WusLiqTCEiGCmICCMplcCkIwwR11mOSD9CR5u+IXYdiseeEuXCVAjS54zqwkLcPNnmU4OeJ6tUrWhDw=="
