@@ -20,9 +20,7 @@ router.get('/', asyncMiddleware(async (req, res) => {
   // var wapikey = "asdasd"
   
   var PassPhrase = process.env.cragpassphrase; 
-  console.log(PassPhrase, req.headers.wapikey);
   var wapikey = sjcl.decrypt(PassPhrase, req.headers.wapikey);
-  console.log(wapikey);
   const cragjson = await call_worker(wapikey)
   res.json(cragjson);
 }));
@@ -55,7 +53,7 @@ async function update_dataset(json, wapikey) {
   var yyyy = moment().tz("America/New_York").format("YYYY")
   var dformat = `${yyyy}-${mm}-${dd}`
   const headers = new Headers();
-  // console.log(json);
+  console.log(json);
   console.log(dformat);
   // const start_key = get_start_key(json, dformat);
   const start_key = 0;
