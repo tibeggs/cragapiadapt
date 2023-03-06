@@ -22,6 +22,7 @@ router.get('/', asyncMiddleware(async (req, res) => {
   var PassPhrase = process.env.cragpassphrase; 
   console.log(PassPhrase, req.headers.wapikey);
   var wapikey = sjcl.decrypt(PassPhrase, req.headers.wapikey);
+  console.log(wapikey);
   const cragjson = await call_worker(wapikey)
   res.json(cragjson);
 }));
