@@ -28,6 +28,7 @@ router.get('/', asyncMiddleware(async (req, res) => {
 async function call_worker(wapikey) {
   return new Promise((resolve, reject) => {
     try {
+      console.log("call_worker");
       fetch('https://rapid-poetry-328e.cwmtb.workers.dev/')
         .then(result => {
           // console.log(result);
