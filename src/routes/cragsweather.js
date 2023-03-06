@@ -59,13 +59,14 @@ async function update_dataset(json, wapikey) {
   console.log(dformat);
   // const start_key = get_start_key(json, dformat);
   const start_key = 0;
-  console.log(start_key)
+  // console.log(start_key)
   for (const crag_key of Object.entries(json)) {
     // await get_weather(crag_key[0], json)
-    if (parseInt(start_key) - 1 < parseInt(crag_key[0]) && parseInt(crag_key[0]) < parseInt(start_key) + 1) {
-      // console.log(crag_key[0]);
-      await get_weather(crag_key[0], json,wapikey)
-    }
+    await get_weather(crag_key[0], json,wapikey);
+    // if (parseInt(start_key) - 1 < parseInt(crag_key[0]) && parseInt(crag_key[0]) < parseInt(start_key) + 1) {
+    //   // console.log(crag_key[0]);
+    //   await get_weather(crag_key[0], json,wapikey)
+    // }
 
   }
   // console.log(json);
@@ -92,8 +93,6 @@ function get_start_key(json, today) {
 async function get_weather(crag_key, json, wapikey) {
   return new Promise((resolve, reject) => {
     try {
-      json[crag_key].forecast = "foo";
-      resolve();
       // console.log(crag_key);
       var d = new Date();
       d.setDate(d.getDate() - 1);
