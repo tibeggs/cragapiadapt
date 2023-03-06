@@ -60,15 +60,22 @@ async function update_dataset(json, wapikey) {
   // const start_key = get_start_key(json, dformat);
   const start_key = 0;
   // console.log(start_key)
-  for (const crag_key of Object.entries(json)) {
+  await Object.entries(json).forEach(crag_key => {
     // await get_weather(crag_key[0], json)
-    await get_weather(crag_key[0], json,wapikey);
+    try{
+      get_weather(crag_key[0], json,wapikey);
+    }
+    catch(err){
+      console.log(err);
+    }
+    
     // if (parseInt(start_key) - 1 < parseInt(crag_key[0]) && parseInt(crag_key[0]) < parseInt(start_key) + 1) {
     //   // console.log(crag_key[0]);
     //   await get_weather(crag_key[0], json,wapikey)
     // }
 
   }
+  )
   // console.log(json);
   // await env.cragweatherbucket.put("crags.json", JSON.stringify(json));
   // return new Response(`Put "crags.json" successfully!`);
