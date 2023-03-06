@@ -43,7 +43,7 @@ async function call_worker(wapikey) {
           // resolve(res);
     }
     catch (err) {
-      console.log("error");
+      console.log("error", err);
       resolve(err);
     }
   })
