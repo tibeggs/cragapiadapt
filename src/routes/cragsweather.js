@@ -22,8 +22,11 @@ router.get('/', asyncMiddleware(async (req, res) => {
 
   var PassPhrase = process.env.cragpassphrase;
   var wapikey = sjcl.decrypt(PassPhrase, req.headers.wapikey);
-  const cragjson = await call_worker(wapikey)
-  res.json(cragjson);
+  call_worker(wapikey)
+  .then(json =>{
+    res.json(json);
+  })
+  
 }));
 
 async function call_worker(wapikey) {
@@ -52,6 +55,7 @@ async function call_worker(wapikey) {
 }
 
 async function update_dataset(json, wapikey) {
+  await sleep(100);
   var dd = moment().tz("America/New_York").format("DD")
   var mm = moment().tz("America/New_York").format("MM")
   var yyyy = moment().tz("America/New_York").format("YYYY")
@@ -65,8 +69,9 @@ async function update_dataset(json, wapikey) {
     //  await Object.entries(json).forEach(crag_key => {
     // await get_weather(crag_key[0], json)
     try {
-      if(needs_update(crag_key)){
-        get_weather(crag_key[0], json, wapikey);
+      console.log(needs_update(crag_key[0], json));
+      if(needs_update(crag_key[0], json)){
+        await get_weather(crag_key[0], json, wapikey);
       }
       
     }
@@ -125,7 +130,6 @@ async function get_weather(crag_key, json, wapikey) {
         }
         )
         .then(data => {
-
           fetch(past_url, init).then(response => {
 
             gatherResponse(response)
@@ -167,9 +171,10 @@ async function gatherResponse(response) {
   return response.text();
 }
 
-function needs_update(crag_key, today) {
-  if (crag_key[1].forecast && crag_key[1].forecast.forecastday) {
-    if (crag_key[1].forecast.forecastday[0].date != today) {
+function needs_update(crag_key,json, today) {
+  var check = json[crag_key];
+  if (check.forecast && check.forecast.forecastday) {
+    if (check.forecast.forecastday[0].date != today) {
       return true
     }
   }
@@ -177,6 +182,12 @@ function needs_update(crag_key, today) {
     return false
   }
   return true
+}
+
+function sleep(ms) {
+  return new Promise((resolve) => {
+    setTimeout(resolve, ms);
+  });
 }
 
 module.exports = router;
