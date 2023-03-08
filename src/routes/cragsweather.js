@@ -60,7 +60,8 @@ async function update_dataset(json, wapikey) {
   // const start_key = get_start_key(json, dformat);
   const start_key = 0;
   // console.log(start_key)
-  await Object.entries(json).forEach(crag_key => {
+  for (crag_key in Object.entries(json)){
+  //  await Object.entries(json).forEach(crag_key => {
     // await get_weather(crag_key[0], json)
     try{
       get_weather(crag_key[0], json,wapikey);
@@ -75,26 +76,9 @@ async function update_dataset(json, wapikey) {
     // }
 
   }
-  )
+  // )
   // console.log(json);
-  // await env.cragweatherbucket.put("crags.json", JSON.stringify(json));
-  // return new Response(`Put "crags.json" successfully!`);
   return json
-}
-
-function get_start_key(json, today) {
-  for (const crag_key of Object.entries(json)) {
-    if (crag_key[1].forecast && crag_key[1].forecast.forecastday) {
-      if (crag_key[1].forecast.forecastday[0].date != today) {
-        return crag_key[0]
-      }
-    }
-    else {
-      return crag_key[0]
-    }
-
-  }
-  return -1
 }
 
 async function get_weather(crag_key, json, wapikey) {
