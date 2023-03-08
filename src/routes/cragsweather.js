@@ -19,8 +19,8 @@ const asyncMiddleware = fn => (req, res, next) => {
 
 router.get('/', asyncMiddleware(async (req, res) => {
   // var wapikey = "asdasd"
-  
-  var PassPhrase = process.env.cragpassphrase; 
+
+  var PassPhrase = process.env.cragpassphrase;
   var wapikey = sjcl.decrypt(PassPhrase, req.headers.wapikey);
   const cragjson = await call_worker(wapikey)
   res.json(cragjson);
@@ -35,13 +35,14 @@ async function call_worker(wapikey) {
           // console.log(result);
           // console.log(result.json());
           result.json()
-          .then(res => {
-            update_dataset(res,wapikey)
-            .then(result => {
-              resolve(result)
+            .then(res => {
+              update_dataset(res, wapikey)
+                .then(result => {
+                  resolve(result)
+                })
             })
-          })})
-          // resolve(res);
+        })
+      // resolve(res);
     }
     catch (err) {
       console.log("error", err);
@@ -60,16 +61,19 @@ async function update_dataset(json, wapikey) {
   // const start_key = get_start_key(json, dformat);
   const start_key = 0;
   // console.log(start_key)
-  for (crag_key in Object.entries(json)){
-  //  await Object.entries(json).forEach(crag_key => {
+  for (crag_key in Object.entries(json)) {
+    //  await Object.entries(json).forEach(crag_key => {
     // await get_weather(crag_key[0], json)
-    try{
-      get_weather(crag_key[0], json,wapikey);
+    try {
+      if(needs_update(crag_key)){
+        get_weather(crag_key[0], json, wapikey);
+      }
+      
     }
-    catch(err){
+    catch (err) {
       console.log(err);
     }
-    
+
     // if (parseInt(start_key) - 1 < parseInt(crag_key[0]) && parseInt(crag_key[0]) < parseInt(start_key) + 1) {
     //   // console.log(crag_key[0]);
     //   await get_weather(crag_key[0], json,wapikey)
@@ -111,7 +115,6 @@ async function get_weather(crag_key, json, wapikey) {
           gatherResponse(response)
             .then(results => {
               let wfor = JSON.parse(results);
-
               let forecast = wfor.forecast;
               let newfd = forecast.forecastday
               Object.entries(newfd).forEach((day) => {
@@ -162,6 +165,18 @@ async function gatherResponse(response) {
     return JSON.stringify(await response.json());
   }
   return response.text();
+}
+
+function needs_update(crag_key, today) {
+  if (crag_key[1].forecast && crag_key[1].forecast.forecastday) {
+    if (crag_key[1].forecast.forecastday[0].date != today) {
+      return true
+    }
+  }
+  else {
+    return false
+  }
+  return true
 }
 
 module.exports = router;
