@@ -25,6 +25,7 @@ router.get('/', asyncMiddleware(async (req, res) => {
   var putkey = sjcl.encrypt(PassPhrase, putPhrase)
   call_worker(wapikey)
     .then(json => {
+      console.log("finish get starting put");
       put_json(worker_put, json, putkey)
         .then(data => {
           res.json(json);
@@ -44,7 +45,7 @@ async function put_json(url, json, putkey) {
 
 
   // Awaiting response.json()
-  const resData = await response.json();
+  const resData = await response.text();
   return resData;
 }
 
@@ -88,7 +89,6 @@ async function update_dataset(json, wapikey) {
   await Object.entries(json).forEach(crag_key => {
     // await get_weather(crag_key[0], json)
     try {
-      console.log(needs_update(crag_key[0], json));
       if (needs_update(crag_key[0], json)) {
         get_weather(crag_key[0], json, wapikey);
       }
@@ -125,7 +125,7 @@ async function get_weather(crag_key, json, wapikey) {
       var lat = lnglat[1];
       var forecast_url = `https://api.weatherapi.com/v1/forecast.json?key=${wapikey}&q=${lat},${lng}&days=10&aqi=no&alerts=no`;
       var past_url = `https://api.weatherapi.com/v1/history.json?key=${wapikey}&q=${lat},${lng}&dt=${yyyy}-${mm}-${dd}`
-      console.log(forecast_url);
+      // console.log(forecast_url);
       const init = {
         headers: {
           'content-type': 'application/json;charset=UTF-8',
