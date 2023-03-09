@@ -24,15 +24,15 @@ router.get('/', asyncMiddleware(async (req, res) => {
   var wapikey = sjcl.decrypt(PassPhrase, req.headers.wapikey);
   var putkey = sjcl.encrypt(PassPhrase, putPhrase)
   call_worker(wapikey)
-  .then(json =>{
-    put_json(worker_put,json, putkey)
-    .then(data => {
-      res.json(json);
+    .then(json => {
+      put_json(worker_put, json, putkey)
+        .then(data => {
+          res.json(json);
+        })
     })
-  })
-  
+
 }));
-async function put_json(url, json, putkey){
+async function put_json(url, json, putkey) {
   const response = await fetch(url, {
     method: 'PUT',
     headers: {
@@ -41,8 +41,8 @@ async function put_json(url, json, putkey){
     },
     body: JSON.stringify(json)
   });
-  
-    
+
+
   // Awaiting response.json()
   const resData = await response.json();
   return resData;
@@ -84,15 +84,15 @@ async function update_dataset(json, wapikey) {
   // const start_key = get_start_key(json, dformat);
   const start_key = 0;
   // console.log(start_key)
-  for (crag_key in Object.entries(json)) {
-    //  await Object.entries(json).forEach(crag_key => {
+  // for (crag_key in Object.entries(json)) {
+  await Object.entries(json).forEach(crag_key => {
     // await get_weather(crag_key[0], json)
     try {
       console.log(needs_update(crag_key[0], json));
-      if(needs_update(crag_key[0], json)){
-        await get_weather(crag_key[0], json, wapikey);
+      if (needs_update(crag_key[0], json)) {
+        get_weather(crag_key[0], json, wapikey);
       }
-      
+
     }
     catch (err) {
       console.log(err);
@@ -104,7 +104,7 @@ async function update_dataset(json, wapikey) {
     // }
 
   }
-  // )
+  )
   // console.log(json);
   return json
 }
@@ -190,7 +190,7 @@ async function gatherResponse(response) {
   return response.text();
 }
 
-function needs_update(crag_key,json, today) {
+function needs_update(crag_key, json, today) {
   var check = json[crag_key];
   if (check.forecast && check.forecast.forecastday) {
     if (check.forecast.forecastday[0].date != today) {
