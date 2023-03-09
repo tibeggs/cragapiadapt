@@ -18,16 +18,35 @@ const asyncMiddleware = fn => (req, res, next) => {
 };
 
 router.get('/', asyncMiddleware(async (req, res) => {
-  // var wapikey = "asdasd"
-
+  const worker_put = "billowing-silence-4201.cwmtb.workers.dev"
   var PassPhrase = process.env.cragpassphrase;
+  var putPhrase = process.env.putPhrase;
   var wapikey = sjcl.decrypt(PassPhrase, req.headers.wapikey);
+  var putkey = sjcl.encrypt(PassPhrase, putPhrase)
   call_worker(wapikey)
   .then(json =>{
-    res.json(json);
+    put_json(worker_put,json, putkey)
+    .then(data => {
+      res.json(json);
+    })
   })
   
 }));
+async function put_json(url, json, putkey){
+  const response = await fetch(url, {
+    method: 'PUT',
+    headers: {
+      'Content-type': 'application/json',
+      'crageapikey': putkey
+    },
+    body: JSON.stringify(json)
+  });
+  
+    
+  // Awaiting response.json()
+  const resData = await response.json();
+  return resData;
+}
 
 async function call_worker(wapikey) {
   return new Promise((resolve, reject) => {
