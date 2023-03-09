@@ -18,7 +18,7 @@ const asyncMiddleware = fn => (req, res, next) => {
 };
 
 router.get('/', asyncMiddleware(async (req, res) => {
-  const worker_put = "billowing-silence-4201.cwmtb.workers.dev"
+  const worker_put = "https://billowing-silence-4201.cwmtb.workers.dev/"
   var PassPhrase = process.env.cragpassphrase;
   var putPhrase = process.env.putPhrase;
   var wapikey = sjcl.decrypt(PassPhrase, req.headers.wapikey);
