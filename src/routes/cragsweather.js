@@ -74,7 +74,7 @@ async function call_worker(wapikey) {
 }
 
 async function update_dataset(json, wapikey) {
-  await sleep(1);
+  // await sleep(1);
   var dd = moment().tz("America/New_York").format("DD")
   var mm = moment().tz("America/New_York").format("MM")
   var yyyy = moment().tz("America/New_York").format("YYYY")
